@@ -1,0 +1,6 @@
+Files you'll need
+
+Something to read in Files
+https://stackoverflow.com/questions/9318534/creating-a-maze-solving-algorithm-in-java
+
+Wrapping movement is allowed. Think Pac man looping through from one side of the screen to the other (Portals)
