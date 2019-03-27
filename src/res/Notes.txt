@@ -2,5 +2,56 @@ Files you'll need
 
 Something to read in Files
 https://stackoverflow.com/questions/9318534/creating-a-maze-solving-algorithm-in-java
+https://www.journaldev.com/867/java-read-text-file
+
+https://docs.oracle.com/javase/7/docs/api/java/util/StringTokenizer.html
 
 Wrapping movement is allowed. Think Pac man looping through from one side of the screen to the other (Portals)
+
+1. Create Array to Hold maze,
+    Should be flexible to hold any array size
+2. Read maze text Files
+3. Split each line and put it into the arraylist
+4. While there are entries in the array
+5.  
+
+
+A switch case might be a good idea to track decision making process
+
+
+1)Initialize array list to hold maze 
+    Okay make sense
+
+2)Read text file holding maze in format
+    Again with you there
+
+    o x x x x o
+    o o x o x x
+    o o o o o x
+    x x x x o o
+3)Create variables to hold numbers of columns and rows
+    Why? 
+
+3)While text file has next line
+    A. Read next line
+    B. Tokenize line
+    C. Create a temporary ArrayList
+    D. While there are tokens
+        i. Get token
+        ii. create a Point
+        iii. add point to temp ArrayList
+        iv. increment maximum number of columns
+    E. Add temp to maze arraylist, increment max rows
+    //Why?
+
+    F. initialize a hold of points as max rows - 1
+    G. Create a start point with x values as maximum number of rows - 1, and y values as maximum number of columns - 1
+    H. Create stack of points and push starting location
+    I. While finished searching is not done
+        i . Look at top of stack and check for finish
+        ii. check neighbors
+        iii. is there an open neighbor?
+            - if yes, update flags and push
+            - if no, pop from stack
+    J. Print solution
+4. Done is true
