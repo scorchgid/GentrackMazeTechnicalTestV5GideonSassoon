@@ -1,1 +1,4 @@
 https://stackoverflow.com/questions/1844688/how-to-read-all-files-in-a-folder-from-java
+https://stackoverflow.com/questions/52369327/how-to-read-data-from-all-files-one-by-one-in-a-folder-with-java
+http://tutorials.jenkov.com/java-nio/path.html
+https://www.journaldev.com/867/java-read-text-file
