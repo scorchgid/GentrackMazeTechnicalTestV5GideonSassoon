@@ -1,4 +1,9 @@
+File/Path
 https://stackoverflow.com/questions/1844688/how-to-read-all-files-in-a-folder-from-java
 https://stackoverflow.com/questions/52369327/how-to-read-data-from-all-files-one-by-one-in-a-folder-with-java
 http://tutorials.jenkov.com/java-nio/path.html
 https://www.journaldev.com/867/java-read-text-file
+
+Lambda replace
+https://stackoverflow.com/questions/22757764/how-to-change-items-in-a-list-of-string-in-java8
+https://howtodoinjava.com/java/collections/arraylist/arraylist-replaceall-example/

@@ -11,9 +11,10 @@ public class Maze {
     private int mazeEndX;
     private int mazeEndY;
     List<String> mazeString = null;
-    List<String> mazeActual= null;
 
-    List<List<String>> maze;
+    //List<MazeSpace> mazeCurrent;
+    //List<List<MazeSpace>> maze;
+
     private String[] parts;
 
     public Maze(Path file) {
@@ -23,26 +24,14 @@ public class Maze {
             mazeString.forEach(System.out::println);
             getMazeProperties();
             mazePropertiesRemoval();
+            mazeReplace();
 
-            for (int i = 0; i <= mazeHeight; i++){
-                System.out.println(mazeString.get(i));
-                parts = mazeString.get(i).split(" ");
-
-                //maze.add()
-            }
-
-            for (String mazeItem : mazeString) {
-                System.out.println(mazeItem);
-                //parts = mazeString.get().split(" ");
-            }
-
-            //mazeString.forEach(maze.);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void getMazeProperties(){
+    private void getMazeProperties() {
         parts = mazeString.get(0).split(" ");
         mazeWidth = Integer.parseInt(parts[0]);
         mazeHeight = Integer.parseInt(parts[1]);
@@ -62,13 +51,21 @@ public class Maze {
                 "\nmazeEndY: " + mazeEndY);
     }
 
-    private void mazePropertiesRemoval(){
+    private void mazePropertiesRemoval() {
         System.out.println("\nmaze line removal");
-        for (int i = 0; i <3; i++){
+        for (int i = 0; i < 3; i++) {
             System.out.println(mazeString.get(0));
             mazeString.remove(0);
         }
         System.out.println("\nMaze file after removal:");
+        mazeString.forEach(System.out::println);
+    }
+
+    private void mazeReplace() {
+        mazeString.replaceAll(x -> x.replaceAll("1","#"));
+        mazeString.replaceAll(x -> x.replaceAll(" ",""));
+        mazeString.replaceAll(x -> x.replaceAll("0"," "));
+        System.out.println("\nReplacement");
         mazeString.forEach(System.out::println);
     }
 

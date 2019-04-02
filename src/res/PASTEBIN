@@ -1,0 +1,36 @@
+            for (int i = 0; i <= mazeHeight; i++) {
+                for (int j = 0; j < mazeWidth; j++) {
+                    parts = mazeString.get(j).split(" ");
+                    System.out.println("i = " + i + " j = " + j + " Part = "+ parts[i]);
+                }
+                for (String icon : parts){
+                    System.out.println("Icon: " + icon);
+                }
+
+                System.out.println(mazeString.get(i));
+                maze.add()
+            }
+
+            for (String mazeItem : mazeString) {
+
+                String a = mazeItem.substring(0,1);
+                String b = mazeItem.substring(2,3);
+                String c = mazeItem.substring(4,5);
+                String d = mazeItem.substring(6,7);
+                String e = mazeItem.substring(8,9);
+
+                String a = mazeItem.split("");
+                String b = mazeItem.split(" ");
+                String c = mazeItem.split(" ");
+                String d = mazeItem.split(" ");
+                String e = mazeItem.split(" ");
+
+
+                System.out.println(a + b + c + d + e);
+
+
+                System.out.println(mazeItem);
+                parts = mazeString.get().split(" ");
+            }
+
+            mazeString.forEach(maze.);
