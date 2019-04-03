@@ -1,15 +1,37 @@
-public class MazeSpace {
+class MazeSpace {
+    protected Boolean wall;
+    protected int positionX;
+    protected int positionY;
 
-    private Boolean wall;
-    private int positionX;
-    private int positionY;
-    private Boolean glados = false; //Will be able to check if this object's was a 0 which was the start of a row. Thereby allowing it able to be traversed
-    public MazeSpace(String number) throws Exception {
-        if (number.equals("0"))
+    MazeSpace(String number, int positionX, int positionY) throws Exception {
+        if (number.equals("1"))
             wall = true;
-        else if (number.equals("1"))
+        else if (number.equals("0"))
             wall = false;
         else
-            throw new Exception("Give MazeSpace did not equal a 1 or 0.\nItem given was: " + number);
+            throw new Exception("Give MazeSpaceClear did not equal a 1 or 0.\nItem given was: " + number
+                    + "\nProperties:\n" + toStringProperties());
+        this.positionX = positionX;
+        this.positionY = positionY;
+    }
+
+    @Override
+    public String toString() {
+        if (positionY == 0)
+            return "\n#";
+        else
+            return "#";
+    }
+
+    /***
+     * Prints properties of object
+     * @return wall, positionX, positionY
+     */
+    public String toStringProperties() {
+        return "MazeSpaceClear{" +
+                "wall=" + wall +
+                ", positionX=" + positionX +
+                ", positionY=" + positionY +
+                '}';
     }
 }

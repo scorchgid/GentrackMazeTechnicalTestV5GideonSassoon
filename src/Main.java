@@ -10,6 +10,14 @@ public class Main {
         System.out.println("Hello GenTrack");
         List<Path> files = buildFileList();
         Maze maze = new Maze(files.get(0));
+        //TODO change to this method on submission
+        //runEachMaze(files);
+    }
+
+    public static void runEachMaze(List<Path> files){
+        for(Path file : files){
+            Maze maze = new Maze(file);
+        }
     }
 
     /***

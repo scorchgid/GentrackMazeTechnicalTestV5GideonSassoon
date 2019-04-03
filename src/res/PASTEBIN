@@ -1,3 +1,9 @@
+    List<List<String>> maze2DString = new ArrayList<List<String>>();
+    List<List<MazeSpaceClear>> maze2D = new ArrayList<List<MazeSpaceClear>>();
+    List<MazeSpaceClear> mazeCurrent;
+    List<List<MazeSpaceClear>> maze;
+
+
             for (int i = 0; i <= mazeHeight; i++) {
                 for (int j = 0; j < mazeWidth; j++) {
                     parts = mazeString.get(j).split(" ");
@@ -34,3 +40,21 @@
             }
 
             mazeString.forEach(maze.);
+
+
+TO string method for Maze items old
+/*
+    @Override
+    public String toString() {
+        if (positionY == 0) {
+            if (wall == true)
+                return "\n#";
+            else return "\n ";
+        }
+        else{
+            if (wall == true)
+                return "#";
+            else return " ";
+        }
+    }
+*/
