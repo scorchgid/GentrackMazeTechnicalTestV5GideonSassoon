@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -11,10 +10,8 @@ public class Maze {
     private int mazeStartY;
     private int mazeEndX;
     private int mazeEndY;
-    List<String> mazeString = null;
-    List<MazeSpace> mazeList = new ArrayList<>();
-
-
+    private List<String> mazeString = null;
+    private List<MazeSpace> mazeList = new ArrayList<>();
     private String[] parts;
 
     public Maze(Path file) {
@@ -24,9 +21,9 @@ public class Maze {
             mazeString.forEach(System.out::println);
             getMazeProperties();
             maze2DimensionalArray();
-            //mazeReplace();
+            markStartAndEndPosition();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -56,20 +53,12 @@ public class Maze {
                 "\nmazeEndX: " + mazeEndX +
                 "\nmazeEndY: " + mazeEndY);
 
-        //System.out.println("\nmaze line removal");
+        //System.out.println("\nMaze line removal");
         for (int i = 0; i < 3; i++) {
             System.out.println(mazeString.get(0));
             mazeString.remove(0);
         }
         //System.out.println("\nMaze file after removal:");
-        mazeString.forEach(System.out::println);
-    }
-
-    private void mazeReplace() {
-        mazeString.replaceAll(x -> x.replaceAll("1", "#"));
-        mazeString.replaceAll(x -> x.replaceAll(" ", ""));
-        mazeString.replaceAll(x -> x.replaceAll("0", " "));
-        System.out.println("\nReplacement");
         mazeString.forEach(System.out::println);
     }
 
@@ -85,33 +74,61 @@ public class Maze {
             for (String mazeItem : parts) {
                 System.out.println(mazeItem + " Current Column index " + currentIndexColumn);
                 try {
-                    if (mazeItem.equals("0")) {
+                    if (mazeItem.equals("0"))
                         mazeList.add(new MazeSpaceClear(mazeItem, currentIndexRow, currentIndexColumn, mazeHeight, mazeWidth));
-                    } else {
+                    else
                         mazeList.add(new MazeSpace(mazeItem, currentIndexRow, currentIndexColumn));
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 currentIndexColumn++;
             }
-
-
             System.out.println("Maze line " + currentIndexRow + " ");
             currentIndexRow++;
         }
+        printMaze("End of maze2DimensionalArray()");
+    }
+
+    private void printMaze(String message){
+        System.out.println("PrintMaze: " + message);
         for (MazeSpace mazeItemRow : mazeList) {
             System.out.print(mazeItemRow.toString());
             //System.out.println(mazeItemRow.toStringProperties());
         }
     }
 
-    //TODO Mark the star position with an S.
-    //TODO Do the calculation logic to find exit of maze, Switch case? Or: Is this a space I can move to?
-    //TODO Find out how to do deal with "Have I been this way before?"
-    private void markStartPosition() {
+    private void markStartAndEndPosition() throws Exception {
+        for (MazeSpace mazeSearch : mazeList) {
+            if (mazeSearch.positionY == mazeStartY && mazeSearch.positionX == mazeStartX) {
+                if (mazeSearch instanceof MazeSpaceClear) {
+                    ((MazeSpaceClear) mazeSearch).setStart(true);
+                    System.out.println("\n" + mazeSearch.toStringProperties());
+                } else
+                    throw new Exception("markStartAndEndPosition Maze.java, Start position is marked here but MazeSpace " + mazeSearch.hashCode() + " is does not inherit MazeSpaceClear." +
+                            "\nStart Co-ordinates:" +
+                            "\nX: " + mazeStartX +
+                            "\nY: " + mazeStartY +
+                            "\nProperties for this object is as follows:\n" +
+                            mazeSearch.toStringProperties());
+            }
+
+            if (mazeSearch.positionY == mazeEndY && mazeSearch.positionX == mazeEndX) {
+                if (mazeSearch instanceof MazeSpaceClear) {
+                    ((MazeSpaceClear) mazeSearch).setEnd(true);
+                    System.out.println("\n" + mazeSearch.toStringProperties());
+                } else
+                    throw new Exception("markStartAndEndPosition Maze.java, End position is marked here but MazeSpace " + mazeSearch.hashCode() + " is does not inherit MazeSpaceClear." + "\nEnd Co-ordinates:" +
+                            "\nX: " + mazeEndX +
+                            "\nY: " + mazeEndY +
+                            "\nProperties for this object is as follows:\n" +
+                            mazeSearch.toStringProperties());
+            }
+        }
+        printMaze("End of markStartAndEndPosition()");
     }
 
+    //TODO Do the calculation logic to find exit of maze, Switch case? Or: Is this a space I can move to?
+    //TODO Find out how to do deal with "Have I been this way before?"
     public enum mazeItem {
         WALL, SPACE
     }

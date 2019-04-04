@@ -9,7 +9,7 @@ class MazeSpace {
         else if (number.equals("0"))
             wall = false;
         else
-            throw new Exception("Give MazeSpaceClear did not equal a 1 or 0.\nItem given was: " + number
+            throw new Exception("MazeSpace (Constructor) MazeSpace.java Given MazeSpace Object did not equal a 1 or 0.\nItem given was: " + number
                     + "\nProperties:\n" + toStringProperties());
         this.positionX = positionX;
         this.positionY = positionY;
@@ -28,7 +28,7 @@ class MazeSpace {
      * @return wall, positionX, positionY
      */
     public String toStringProperties() {
-        return "MazeSpaceClear{" +
+        return "MazeSpace Object Properties{" +
                 "wall=" + wall +
                 ", positionX=" + positionX +
                 ", positionY=" + positionY +

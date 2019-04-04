@@ -7,3 +7,7 @@ https://www.journaldev.com/867/java-read-text-file
 Lambda replace
 https://stackoverflow.com/questions/22757764/how-to-change-items-in-a-list-of-string-in-java8
 https://howtodoinjava.com/java/collections/arraylist/arraylist-replaceall-example/
+
+ArrayList by property
+https://stackoverflow.com/questions/17526608/how-to-find-an-object-in-an-arraylist-by-property
+https://stackoverflow.com/questions/30022840/how-do-you-pull-specific-objects-from-an-arraylist

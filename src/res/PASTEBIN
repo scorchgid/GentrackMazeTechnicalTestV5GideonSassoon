@@ -41,6 +41,14 @@
 
             mazeString.forEach(maze.);
 
+private void mazeReplace() {
+    mazeString.replaceAll(x -> x.replaceAll("1", "#"));
+    mazeString.replaceAll(x -> x.replaceAll(" ", ""));
+    mazeString.replaceAll(x -> x.replaceAll("0", " "));
+    System.out.println("\nReplacement");
+    mazeString.forEach(System.out::println);
+}
+
 
 TO string method for Maze items old
 /*

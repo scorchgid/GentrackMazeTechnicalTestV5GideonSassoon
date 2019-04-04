@@ -1,9 +1,9 @@
 public class MazeSpaceClear extends MazeSpace {
 
-    public Boolean glados = false; //Will be able to check if this object's was a 0 which was the start of a row. Thereby allowing it able to be traversed. Now you're thinking with Portals ;)
-    public Boolean traveled = false; //Has this space been used for travel
-    public Boolean start = false; //Is this the starting space
-    public Boolean end = false; //Is this the ending space
+    private Boolean glados = false; //Will be able to check if this object's was a 0 which was the start of a row. Thereby allowing it able to be traversed. Now you're thinking with Portals ;)
+    private Boolean traveled = false; //Has this space been used for travel
+    private Boolean start = false; //Is this the starting space
+    private Boolean end = false; //Is this the ending space
 
     /***
      * @param number either a 1 or 0
@@ -25,12 +25,41 @@ public class MazeSpaceClear extends MazeSpace {
             glados = true;
     }
 
+    public void setStart(Boolean start) {
+        this.start = start;
+    }
+
+    public void setEnd(Boolean end) {
+        this.end = end;
+    }
+
+    /***
+     * To string will now check if the space is a Start, End or traveled and will mark it correctly.
+     * Will also check if this space is marked as both a start and end point and notify the program may not work correctly.
+     * @return A string with the correct value of that MazeSpace.
+     */
     @Override
     public String toString() {
+        if (start && end)
+            try {
+                throw new Exception("toString() MazeSpaceClear.java You have set the start point and end point as the same co-ordinates this program will not work correctly\n" + toStringProperties());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        String patternBuild = "";
         if (positionY == 0)
-            return "\n ";
+            patternBuild = "\n";
+
+        if (start)
+            patternBuild = patternBuild + "S";
+        else if (end)
+            patternBuild = patternBuild + "E";
+        else if (traveled)
+            patternBuild = patternBuild + "X";
         else
-            return " ";
+            patternBuild = patternBuild + " ";
+        return patternBuild;
     }
 
     /***
@@ -39,7 +68,7 @@ public class MazeSpaceClear extends MazeSpace {
      */
     @Override
     public String toStringProperties() {
-        return "MazeSpaceClear{" +
+        return "MazeSpaceClear Object Properties{" +
                 "wall=" + wall +
                 ", positionX=" + positionX +
                 ", positionY=" + positionY +
