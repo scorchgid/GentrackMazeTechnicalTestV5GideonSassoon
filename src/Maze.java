@@ -17,16 +17,15 @@ public class Maze {
 
     public Maze(Path file) {
         try {
-            mazeFileName = file.toString();
+            mazeFileName = file.getFileName().toString();
             mazeString = Files.readAllLines(file);
-            System.out.println("\nMaze file:");
-            //mazeString.forEach(System.out::println);
+            //printRawMaze("\nMaze file:");
             getMazeProperties();
             maze2DimensionalArray();
             markStartAndEndPosition();
 
         } catch (Exception e) {
-            System.out.println("\nFileName: " + mazeFileName + "\n");
+            System.err.println("\nException thrown on: " + file.toString());
             e.printStackTrace();
         }
     }
@@ -48,7 +47,7 @@ public class Maze {
         mazeEndX = Integer.parseInt(parts[0]);
         mazeEndY = Integer.parseInt(parts[1]);
 
-        System.out.println("\nCurrent Values:" +
+        System.out.println("\nCurrent Values (" + mazeFileName + "):" +
                 "\nmazeWidth: " + mazeWidth +
                 "\nmazeHeight: " + mazeHeight +
                 "\nmazeStartX: " + mazeStartX +
@@ -56,13 +55,12 @@ public class Maze {
                 "\nmazeEndX: " + mazeEndX +
                 "\nmazeEndY: " + mazeEndY);
 
-        //System.out.println("\nMaze line removal");
+        System.out.println("\nMaze line removal");
         for (int i = 0; i < 3; i++) {
             System.out.println(mazeString.get(0));
             mazeString.remove(0);
         }
-        //System.out.println("\nMaze file after removal:");
-        //mazeString.forEach(System.out::println);
+        //printRawMaze("\nMaze file after removal:");
     }
 
     private void maze2DimensionalArray() {
@@ -89,6 +87,11 @@ public class Maze {
             currentIndexRow++;
         }
         //printMaze("End of maze2DimensionalArray()");
+    }
+
+    private void printRawMaze(String message){
+        System.out.println("PrintMaze Raw Version : " + message + "\nFile: " + mazeFileName);
+        mazeString.forEach(System.out::println);
     }
 
     private void printMaze(String message) {
