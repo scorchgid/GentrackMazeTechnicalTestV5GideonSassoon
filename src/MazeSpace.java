@@ -17,7 +17,7 @@ class MazeSpace {
 
     @Override
     public String toString(){
-        if (positionY == 0)
+        if (positionX == 0)
             return "\n#";
         else
             return "#";

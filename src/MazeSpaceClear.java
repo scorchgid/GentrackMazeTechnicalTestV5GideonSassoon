@@ -57,7 +57,7 @@ public class MazeSpaceClear extends MazeSpace {
             }
 
         String patternBuild = "";
-        if (positionY == 0)
+        if (positionX == 0)
             patternBuild = "\n";
 
         if (start)
