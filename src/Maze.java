@@ -13,17 +13,20 @@ public class Maze {
     private List<String> mazeString = null;
     private List<MazeSpace> mazeList = new ArrayList<>();
     private String[] parts;
+    private String mazeFileName;
 
     public Maze(Path file) {
         try {
+            mazeFileName = file.toString();
             mazeString = Files.readAllLines(file);
             System.out.println("\nMaze file:");
-            mazeString.forEach(System.out::println);
+            //mazeString.forEach(System.out::println);
             getMazeProperties();
             maze2DimensionalArray();
             markStartAndEndPosition();
 
         } catch (Exception e) {
+            System.out.println("\nFileName: " + mazeFileName + "\n");
             e.printStackTrace();
         }
     }
@@ -59,7 +62,7 @@ public class Maze {
             mazeString.remove(0);
         }
         //System.out.println("\nMaze file after removal:");
-        mazeString.forEach(System.out::println);
+        //mazeString.forEach(System.out::println);
     }
 
     private void maze2DimensionalArray() {
@@ -67,12 +70,12 @@ public class Maze {
 
         int currentIndexRow = 0;
         for (String mazeItemRow : mazeString) {
-            System.out.println(mazeItemRow + " Current index " + currentIndexRow);
+            //System.out.println(mazeItemRow + " Current Row index " + currentIndexRow);
             parts = mazeItemRow.split("");
 
             int currentIndexColumn = 0;
             for (String mazeItem : parts) {
-                System.out.println(mazeItem + " Current Column index " + currentIndexColumn);
+                //System.out.println(mazeItem + " Current Column index " + currentIndexColumn);
                 try {
                     if (mazeItem.equals("0"))
                         mazeList.add(new MazeSpaceClear(mazeItem, currentIndexRow, currentIndexColumn, mazeHeight, mazeWidth));
@@ -83,14 +86,13 @@ public class Maze {
                 }
                 currentIndexColumn++;
             }
-            System.out.println("Maze line " + currentIndexRow + " ");
             currentIndexRow++;
         }
-        printMaze("End of maze2DimensionalArray()");
+        //printMaze("End of maze2DimensionalArray()");
     }
 
-    private void printMaze(String message){
-        System.out.println("PrintMaze: " + message);
+    private void printMaze(String message) {
+        System.out.println("PrintMaze: " + message + "\nFile: " + mazeFileName);
         for (MazeSpace mazeItemRow : mazeList) {
             System.out.print(mazeItemRow.toString());
             //System.out.println(mazeItemRow.toStringProperties());
@@ -102,12 +104,13 @@ public class Maze {
             if (mazeSearch.positionY == mazeStartY && mazeSearch.positionX == mazeStartX) {
                 if (mazeSearch instanceof MazeSpaceClear) {
                     ((MazeSpaceClear) mazeSearch).setStart(true);
-                    System.out.println("\n" + mazeSearch.toStringProperties());
+                    //System.out.println("\nSettingStart: " + mazeSearch.toStringProperties());
                 } else
                     throw new Exception("markStartAndEndPosition Maze.java, Start position is marked here but MazeSpace " + mazeSearch.hashCode() + " is does not inherit MazeSpaceClear." +
                             "\nStart Co-ordinates:" +
                             "\nX: " + mazeStartX +
                             "\nY: " + mazeStartY +
+                            "\nFileName: " + mazeFileName +
                             "\nProperties for this object is as follows:\n" +
                             mazeSearch.toStringProperties());
             }
@@ -115,21 +118,52 @@ public class Maze {
             if (mazeSearch.positionY == mazeEndY && mazeSearch.positionX == mazeEndX) {
                 if (mazeSearch instanceof MazeSpaceClear) {
                     ((MazeSpaceClear) mazeSearch).setEnd(true);
-                    System.out.println("\n" + mazeSearch.toStringProperties());
+                    //System.out.println("\nSettingEnd: " + mazeSearch.toStringProperties());
                 } else
                     throw new Exception("markStartAndEndPosition Maze.java, End position is marked here but MazeSpace " + mazeSearch.hashCode() + " is does not inherit MazeSpaceClear." + "\nEnd Co-ordinates:" +
                             "\nX: " + mazeEndX +
                             "\nY: " + mazeEndY +
+                            "\nFileName: " + mazeFileName +
                             "\nProperties for this object is as follows:\n" +
                             mazeSearch.toStringProperties());
             }
         }
-        printMaze("End of markStartAndEndPosition()");
+        //printMaze("End of markStartAndEndPosition()");
+        findStartAndEndFromMazeObject();
+    }
+
+    private void findStartAndEndFromMazeObject() throws Exception {
+        boolean end = false;
+        boolean start = false;
+        for (MazeSpace mazeSearch : mazeList) {
+            if (mazeSearch instanceof MazeSpaceClear) {
+                if (((MazeSpaceClear) mazeSearch).getStart()) {
+                    System.out.println("Found a Start True Match:\n" + mazeSearch.toStringProperties());
+                    start = true;
+                }
+            }
+            if (mazeSearch instanceof MazeSpaceClear) {
+                if (((MazeSpaceClear) mazeSearch).getEnd()) {
+                    System.out.println("Found a End True Match:\n" + mazeSearch.toStringProperties());
+                    end = true;
+                }
+            }
+        }
+        if (!start && !end)
+            throw new Exception("Missing Start & end in: " + mazeFileName +
+                    "\nStart Should be at " + mazeStartX + "x" + mazeStartY +
+                    "\nEnd Should be at " + mazeEndX + "x" + mazeEndY);
+        if (!start)
+            throw new Exception("Missing Start in: " + mazeFileName +
+                    "\nStart Should be at " + mazeStartX + "x" + mazeStartY);
+        if (!end)
+            throw new Exception("Missing End in: " + mazeFileName +
+                    "\nEnd Should be at " + mazeEndX + "x" + mazeEndY);
     }
 
     //TODO Do the calculation logic to find exit of maze, Switch case? Or: Is this a space I can move to?
     //TODO Find out how to do deal with "Have I been this way before?"
-    public enum mazeItem {
-        WALL, SPACE
+    private void navigateMaze() {
+
     }
 }

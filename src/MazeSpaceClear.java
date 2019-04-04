@@ -25,6 +25,14 @@ public class MazeSpaceClear extends MazeSpace {
             glados = true;
     }
 
+    public Boolean getStart() {
+        return start;
+    }
+
+    public Boolean getEnd() {
+        return end;
+    }
+
     public void setStart(Boolean start) {
         this.start = start;
     }
@@ -42,7 +50,8 @@ public class MazeSpaceClear extends MazeSpace {
     public String toString() {
         if (start && end)
             try {
-                throw new Exception("toString() MazeSpaceClear.java You have set the start point and end point as the same co-ordinates this program will not work correctly\n" + toStringProperties());
+                throw new Exception("toString() MazeSpaceClear.java You have set the start point and end point as the same co-ordinates this program will not work correctly\n"
+                        + toStringProperties());
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -66,3 +66,7 @@ TO string method for Maze items old
         }
     }
 */
+
+    public enum mazeItem {
+        WALL, SPACE
+    }

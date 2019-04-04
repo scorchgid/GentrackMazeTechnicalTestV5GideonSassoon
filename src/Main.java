@@ -11,7 +11,8 @@ public class Main {
         List<Path> files = buildFileList();
         Maze maze = new Maze(files.get(0));
         //TODO change to this method on submission
-        //runEachMaze(files);
+        runEachMaze(files);
+        //TODO Print maze solution to file
     }
 
     public static void runEachMaze(List<Path> files){
