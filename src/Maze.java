@@ -14,6 +14,7 @@ public class Maze {
     private List<MazeSpace> mazeList = new ArrayList<>();
     private String[] parts;
     private String mazeFileName;
+    private Navigator navi;
     /*
      * Allows the turning on and off of PrintLns rather than finding each of them in the file.
      */
@@ -23,7 +24,7 @@ public class Maze {
     private Boolean propertiesPrintMazeException = true;
     private Boolean propertiesPrintMazeLineRemoval = false;
     private Boolean propertiesPrintPropertiesStartEnd = false;
-    private Boolean propertiesPrintMazeStartEnd = true;
+    private Boolean propertiesPrintMazeStartEnd = false;
     private Boolean propertiesPrintLookForStartEnd = false;
 
     public Maze(Path file) {
@@ -35,6 +36,8 @@ public class Maze {
             getMazeProperties();
             maze2DimensionalArray();
             markStartAndEndPosition();
+
+            navigateMaze();
 
         } catch (Exception e) {
             System.err.println("\nException thrown on: " + file.toString());
@@ -107,7 +110,8 @@ public class Maze {
             }
             currentIndexY++;
         }
-        //printMaze("End of maze2DimensionalArray()");
+        if (propertiesPrintXY)
+            printMaze("End of maze2DimensionalArray()");
     }
 
     private void printRawMaze(String message) {
@@ -195,6 +199,52 @@ public class Maze {
     //TODO Do the calculation logic to find exit of maze, Switch case? Or: Is this a space I can move to?
     //TODO Find out how to do deal with "Have I been this way before?"
     private void navigateMaze() {
+        printMaze("before navigation");
+        navi = new Navigator();
+        navi.setCurrentLocation(mazeStartX, mazeStartY);
+        System.out.println(navi.toString());
+        while (!navi.confirmPositionMatches(mazeEndX, mazeEndY)) {
+            printMaze("Navigating");
 
+            if (isMoveHere(navi.getCXL(), navi.getCYL() + 1))
+                moveNavigator(navi.getCXL(), navi.getCYL() + 1);
+            else if (isMoveHere(navi.getCXL() + 1, navi.getCYL()))
+                moveNavigator(navi.getCXL() + 1, navi.getCYL());
+            else if (isMoveHere(navi.getCXL() - 1, navi.getCYL()))
+                moveNavigator(navi.getCXL() - 1, navi.getCYL());
+            else if (isMoveHere(navi.getCXL(), navi.getCYL() - 1))
+                moveNavigator(navi.getCXL(), navi.getCYL() - 1);
+        }
+    }
+
+    private void moveNavigator(int x, int y) {
+        if (setMazeTraveledProperty(x, y, true)) {
+            navi.setCurrentLocation(x, y);
+
+        } else
+            System.err.print("You have moved the navi to an invalid space" + x + y);
+    }
+
+    private Boolean setMazeTraveledProperty(int x, int y, Boolean traveled) {
+        if (isMoveHere(x, y)) {
+            for (MazeSpace mazeSearch : mazeList) {
+                if (mazeSearch.positionX == x && mazeSearch.positionY == y) {
+                    ((MazeSpaceClear) mazeSearch).setTraveled(traveled);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Boolean isMoveHere(int x, int y) {
+        for (MazeSpace mazeSearch : mazeList) {
+            if (mazeSearch.positionX == x && mazeSearch.positionY == y)
+                if (!mazeSearch.wall && mazeSearch instanceof MazeSpaceClear) {
+                    return !((MazeSpaceClear) mazeSearch).getTraveled();
+                } else
+                    return false;
+        }
+        return false;
     }
 }

@@ -41,6 +41,22 @@ public class MazeSpaceClear extends MazeSpace {
         this.end = end;
     }
 
+    public Boolean getGlados() {
+        return glados;
+    }
+
+    public void setGlados(Boolean glados) {
+        this.glados = glados;
+    }
+
+    public Boolean getTraveled() {
+        return traveled;
+    }
+
+    public void setTraveled(Boolean traveled) {
+        this.traveled = traveled;
+    }
+
     /***
      * To string will now check if the space is a Start, End or traveled and will mark it correctly.
      * Will also check if this space is marked as both a start and end point and notify the program may not work correctly.

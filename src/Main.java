@@ -9,9 +9,9 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello GenTrack");
         List<Path> files = buildFileList();
-        //Maze maze = new Maze(files.get(3));
+        Maze maze = new Maze(files.get(1));
         //TODO change to this method on submission
-        runEachMaze(files);
+        //runEachMaze(files);
         //TODO Print maze solution to file
     }
 
