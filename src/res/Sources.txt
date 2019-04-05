@@ -11,3 +11,7 @@ https://howtodoinjava.com/java/collections/arraylist/arraylist-replaceall-exampl
 ArrayList by property
 https://stackoverflow.com/questions/17526608/how-to-find-an-object-in-an-arraylist-by-property
 https://stackoverflow.com/questions/30022840/how-do-you-pull-specific-objects-from-an-arraylist
+
+Creating files
+https://stackoverflow.com/questions/2885173/how-do-i-create-a-file-and-write-to-it-in-java/23221771
+https://www.logicbig.com/how-to/code-snippets/jcode-java-io-files-iswritable.html

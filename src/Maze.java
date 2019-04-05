@@ -11,7 +11,7 @@ public class Maze {
     private int mazeEndX;
     private int mazeEndY;
     private List<String> mazeString = null;
-    private List<MazeSpace> mazeList = new ArrayList<>();
+    private List<MazeSpace> maze = new ArrayList<>();
     private String[] parts;
     private String mazeFileName;
     private Navigator navi;
@@ -45,6 +45,14 @@ public class Maze {
             if (propertiesPrintMazeException)
                 printMaze("Exception Maze");
         }
+    }
+
+    String getMaze() {
+        StringBuilder mazeExport = new StringBuilder();
+        for (MazeSpace mazeItemRow : maze) {
+            mazeExport.append(mazeItemRow.toString());
+        }
+        return mazeExport.toString();
     }
 
     /**
@@ -100,9 +108,9 @@ public class Maze {
                     System.out.println(mazeItem + " Current Column index " + currentIndexX);
                 try {
                     if (mazeItem.equals("0"))
-                        mazeList.add(new MazeSpaceClear(mazeItem, currentIndexX, currentIndexY, mazeHeight, mazeWidth));
+                        maze.add(new MazeSpaceClear(mazeItem, currentIndexX, currentIndexY, mazeHeight, mazeWidth));
                     else
-                        mazeList.add(new MazeSpace(mazeItem, currentIndexX, currentIndexY));
+                        maze.add(new MazeSpace(mazeItem, currentIndexX, currentIndexY));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -121,9 +129,9 @@ public class Maze {
 
     }
 
-    private void printMaze(String message) {
+    void printMaze(String message) {
         System.out.println("\nPrintMaze: " + message + " file: " + mazeFileName);
-        for (MazeSpace mazeItemRow : mazeList) {
+        for (MazeSpace mazeItemRow : maze) {
             System.out.print(mazeItemRow.toString());
             //System.out.println(mazeItemRow.toStringProperties());
         }
@@ -131,7 +139,7 @@ public class Maze {
     }
 
     private void markStartAndEndPosition() throws Exception {
-        for (MazeSpace mazeSearch : mazeList) {
+        for (MazeSpace mazeSearch : maze) {
             if (mazeSearch.positionY == mazeStartY && mazeSearch.positionX == mazeStartX) {
                 if (mazeSearch instanceof MazeSpaceClear) {
                     ((MazeSpaceClear) mazeSearch).setStart(true);
@@ -170,7 +178,7 @@ public class Maze {
     private void findStartAndEndFromMazeObject() throws Exception {
         boolean end = false;
         boolean start = false;
-        for (MazeSpace mazeSearch : mazeList) {
+        for (MazeSpace mazeSearch : maze) {
             if (mazeSearch instanceof MazeSpaceClear) {
                 if (((MazeSpaceClear) mazeSearch).getStart()) {
                     System.out.println("Found a Start True Match:\n" + mazeSearch.toStringProperties());
@@ -196,7 +204,7 @@ public class Maze {
                     "\nEnd Should be at " + mazeEndX + "x" + mazeEndY);
     }
 
-    //TODO Do the calculation logic to find exit of maze, Switch case? Or: Is this a space I can move to?
+
     //TODO Find out how to do deal with "Have I been this way before?"
     private void navigateMaze() {
         printMaze("before navigation");
@@ -206,13 +214,13 @@ public class Maze {
         while (!navi.confirmPositionMatches(mazeEndX, mazeEndY)) {
             printMaze("Navigating");
 
-            if (isMoveHere(navi.getCXL(), navi.getCYL() + 1))
+            if (moveHere(navi.getCXL(), navi.getCYL() + 1))
                 moveNavigator(navi.getCXL(), navi.getCYL() + 1);
-            else if (isMoveHere(navi.getCXL() + 1, navi.getCYL()))
+            else if (moveHere(navi.getCXL() + 1, navi.getCYL()))
                 moveNavigator(navi.getCXL() + 1, navi.getCYL());
-            else if (isMoveHere(navi.getCXL() - 1, navi.getCYL()))
+            else if (moveHere(navi.getCXL() - 1, navi.getCYL()))
                 moveNavigator(navi.getCXL() - 1, navi.getCYL());
-            else if (isMoveHere(navi.getCXL(), navi.getCYL() - 1))
+            else if (moveHere(navi.getCXL(), navi.getCYL() - 1))
                 moveNavigator(navi.getCXL(), navi.getCYL() - 1);
         }
     }
@@ -226,8 +234,8 @@ public class Maze {
     }
 
     private Boolean setMazeTraveledProperty(int x, int y, Boolean traveled) {
-        if (isMoveHere(x, y)) {
-            for (MazeSpace mazeSearch : mazeList) {
+        if (moveHere(x, y)) {
+            for (MazeSpace mazeSearch : maze) {
                 if (mazeSearch.positionX == x && mazeSearch.positionY == y) {
                     ((MazeSpaceClear) mazeSearch).setTraveled(traveled);
                     return true;
@@ -237,8 +245,9 @@ public class Maze {
         return false;
     }
 
-    private Boolean isMoveHere(int x, int y) {
-        for (MazeSpace mazeSearch : mazeList) {
+    //TODO change method to scan if this is a possible route rather than move to this route. Possibly scanning if the surrounding places are moveble to
+    private Boolean moveHere(int x, int y) {
+        for (MazeSpace mazeSearch : maze) {
             if (mazeSearch.positionX == x && mazeSearch.positionY == y)
                 if (!mazeSearch.wall && mazeSearch instanceof MazeSpaceClear) {
                     return !((MazeSpaceClear) mazeSearch).getTraveled();
