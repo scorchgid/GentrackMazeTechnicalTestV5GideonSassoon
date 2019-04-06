@@ -253,7 +253,6 @@ public class Maze {
         }
     }
 
-    //TODO Add these routes to a list.
     /***
      * Method also known as Are we going this way. This is the first part of this method. The Method it calls is to check if it is a potential route
      * From the point of X and Y will check the surrounding coordinates and mark if these are potential routes.
@@ -326,10 +325,15 @@ public class Maze {
     //If navigator is unable to move to this position this method will erase moves made and back track the user to the last known space
     //
     private void backTrack() {
-
+        //TODO use the Potential list and find the last one.
+        //TODO set the Navigator to that position
+        //TODO run navigateMazeRouteAsFailure
     }
 
-    private void navigateMazeRouteAsFailure() {
+    //TODO Set this up to use the same pattern as the Navigate maze.
+    //TODO Set the first direction available as Failure
+    //TODO go through and Navigate through the maze and instead of marking the places as traveled mark them as null.
+    private void navigateMazeRouteAsFailure(int x, int y) {
 
     }
 
@@ -363,7 +367,6 @@ public class Maze {
     }
     //TODO change method to scan if this is a possible route rather than move to this route. Possibly scanning if the surrounding places are movable to
     //TODO Check above TODO to see if still valid. It may no longer be valid.
-
     /***
      * Checks if this position exists
      * Checks if this position is not a wall and is the inherited object MazeSpaceClear
