@@ -1,0 +1,1 @@
+An additional Failure and Potential marker has been added which was not in the test requirement. you can disable this by changing the variable in MazeSpaceClear.java - propertiesPrintXtra to False.

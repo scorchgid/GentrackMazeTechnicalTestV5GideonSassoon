@@ -7,17 +7,33 @@ public class Navigator {
         return x == currentXLocation && y == currentYLocation;
     }
 
-    public void setCurrentLocation(int currentXLocation, int currentYLocation) {
+    void setCurrentLocation(int currentXLocation, int currentYLocation) {
         this.currentXLocation = currentXLocation;
         this.currentYLocation = currentYLocation;
     }
 
-    public int getCXL() {
+    int getCXL() {
         return currentXLocation;
     }
 
-    public int getCYL() {
+    int getCYL() {
         return currentYLocation;
+    }
+
+    int getCYLPlus1() {
+        return currentYLocation + 1;
+    }
+
+    int getCXLPlus1() {
+        return currentXLocation + 1;
+    }
+
+    int getCXLMinus1() {
+        return currentXLocation - 1;
+    }
+
+    int getCYLMinus1() {
+        return currentYLocation - 1;
     }
 
     Boolean confirmPositionMatches(String xy) {

@@ -34,8 +34,8 @@ public class Maze {
             if (propertiesPrintRawInitialMaze)
                 printRawMaze("Maze file:");
             getMazeProperties();
-            maze2DimensionalArray();
-            markStartAndEndPosition();
+            buildMazeIn2DimensionalArray();
+            markMazeStartAndEndPosition();
 
             navigateMaze();
 
@@ -45,6 +45,25 @@ public class Maze {
             if (propertiesPrintMazeException)
                 printMaze("Exception Maze");
         }
+    }
+
+    public enum MazeSpaceClearSetProperties {
+        START, END, POTENTIAL, GLADOS, TRAVELED, FAILURE
+    }
+
+    private void printRawMaze(String message) {
+        System.out.println("\nPrintMaze Raw Version: " + message + " file: " + mazeFileName);
+        mazeString.forEach(System.out::println);
+        System.out.print("\n");
+    }
+
+    void printMaze(String message) {
+        System.out.println("\nPrintMaze: " + message + " file: " + mazeFileName);
+        for (MazeSpace mazeItemRow : maze) {
+            System.out.print(mazeItemRow.toString());
+            //System.out.println(mazeItemRow.toStringProperties());
+        }
+        System.out.print("\n");
     }
 
     String getMaze() {
@@ -80,7 +99,6 @@ public class Maze {
                 "\nmazeEndX: " + mazeEndX +
                 "\nmazeEndY: " + mazeEndY);
 
-
         if (propertiesPrintMazeLineRemoval)
             System.out.println("\nMaze line removal");
         for (int i = 0; i < 3; i++) {
@@ -93,15 +111,13 @@ public class Maze {
             printRawMaze("Maze file after removal");
     }
 
-    private void maze2DimensionalArray() {
+    private void buildMazeIn2DimensionalArray() {
         mazeString.replaceAll(x -> x.replaceAll(" ", ""));
-
         int currentIndexY = 0;
         for (String mazeItemRow : mazeString) {
             if (propertiesPrintXY)
                 System.out.println("\n" + mazeItemRow + " Current Row index " + currentIndexY);
             parts = mazeItemRow.split("");
-
             int currentIndexX = 0;
             for (String mazeItem : parts) {
                 if (propertiesPrintXY)
@@ -119,26 +135,10 @@ public class Maze {
             currentIndexY++;
         }
         if (propertiesPrintXY)
-            printMaze("End of maze2DimensionalArray()");
+            printMaze("End of buildMazeIn2DimensionalArray()");
     }
 
-    private void printRawMaze(String message) {
-        System.out.println("\nPrintMaze Raw Version: " + message + " file: " + mazeFileName);
-        mazeString.forEach(System.out::println);
-        System.out.print("\n");
-
-    }
-
-    void printMaze(String message) {
-        System.out.println("\nPrintMaze: " + message + " file: " + mazeFileName);
-        for (MazeSpace mazeItemRow : maze) {
-            System.out.print(mazeItemRow.toString());
-            //System.out.println(mazeItemRow.toStringProperties());
-        }
-        System.out.print("\n");
-    }
-
-    private void markStartAndEndPosition() throws Exception {
+    private void markMazeStartAndEndPosition() throws Exception {
         for (MazeSpace mazeSearch : maze) {
             if (mazeSearch.positionY == mazeStartY && mazeSearch.positionX == mazeStartX) {
                 if (mazeSearch instanceof MazeSpaceClear) {
@@ -146,7 +146,7 @@ public class Maze {
                     if (propertiesPrintPropertiesStartEnd)
                         System.out.println("\nSettingStart: " + mazeSearch.toStringProperties());
                 } else
-                    throw new Exception("markStartAndEndPosition Maze.java, Start position is marked here but MazeSpace is does not inherit MazeSpaceClear." +
+                    throw new Exception("markMazeStartAndEndPosition Maze.java, Start position is marked here but MazeSpace is does not inherit MazeSpaceClear." +
                             "\nStart Co-ordinates:" +
                             "\nX: " + mazeStartX +
                             "\nY: " + mazeStartY +
@@ -161,7 +161,7 @@ public class Maze {
                     if (propertiesPrintPropertiesStartEnd)
                         System.out.println("\nSettingEnd: " + mazeSearch.toStringProperties());
                 } else
-                    throw new Exception("markStartAndEndPosition Maze.java, End position is marked here but MazeSpace is does not inherit MazeSpaceClear." + "\nEnd Co-ordinates:" +
+                    throw new Exception("markMazeStartAndEndPosition Maze.java, End position is marked here but MazeSpace is does not inherit MazeSpaceClear." + "\nEnd Co-ordinates:" +
                             "\nX: " + mazeEndX +
                             "\nY: " + mazeEndY +
                             "\nFileName: " + mazeFileName +
@@ -170,7 +170,7 @@ public class Maze {
             }
         }
         if (propertiesPrintMazeStartEnd)
-            printMaze("End of markStartAndEndPosition()");
+            printMaze("End of markMazeStartAndEndPosition()");
         if (propertiesPrintLookForStartEnd)
             findStartAndEndFromMazeObject();
     }
@@ -204,53 +204,161 @@ public class Maze {
                     "\nEnd Should be at " + mazeEndX + "x" + mazeEndY);
     }
 
-
-    //TODO Find out how to do deal with "Have I been this way before?"
+    //TODO Find out how to do deal with "Have I been this way before?" - Potential routes
+    //TODO Manage glados issue.
     private void navigateMaze() {
         printMaze("before navigation");
         navi = new Navigator();
         navi.setCurrentLocation(mazeStartX, mazeStartY);
         System.out.println(navi.toString());
+        int chosenX = mazeStartX;
+        int chosenY = mazeStartY;
         while (!navi.confirmPositionMatches(mazeEndX, mazeEndY)) {
             printMaze("Navigating");
-
-            if (moveHere(navi.getCXL(), navi.getCYL() + 1))
-                moveNavigator(navi.getCXL(), navi.getCYL() + 1);
-            else if (moveHere(navi.getCXL() + 1, navi.getCYL()))
-                moveNavigator(navi.getCXL() + 1, navi.getCYL());
-            else if (moveHere(navi.getCXL() - 1, navi.getCYL()))
-                moveNavigator(navi.getCXL() - 1, navi.getCYL());
-            else if (moveHere(navi.getCXL(), navi.getCYL() - 1))
-                moveNavigator(navi.getCXL(), navi.getCYL() - 1);
+            if (checkCanMoveHere(navi.getCXL(), navi.getCYLPlus1())) {
+                markPotentialRoutes(navi.getCXL(), navi.getCYLPlus1(), chosenX, chosenY);
+                moveNavigator(navi.getCXL(), navi.getCYLPlus1());
+                chosenX = navi.getCXL();
+                chosenY = navi.getCYLPlus1();
+            } else if (checkCanMoveHere((navi.getCXLPlus1()), navi.getCYL())) {
+                markPotentialRoutes(navi.getCXLPlus1(), navi.getCYL(), chosenX, chosenY);
+                moveNavigator(navi.getCXLPlus1(), navi.getCYL());
+                chosenX = navi.getCXLPlus1();
+                chosenY = navi.getCYL();
+            } else if (checkCanMoveHere(navi.getCXLMinus1(), navi.getCYL())) {
+                markPotentialRoutes(navi.getCXLMinus1(), navi.getCYL(), chosenX, chosenY);
+                moveNavigator(navi.getCXLMinus1(), navi.getCYL());
+                chosenX = navi.getCXLMinus1();
+                chosenY = navi.getCYL();
+            } else if (checkCanMoveHere(navi.getCXL(), navi.getCYLMinus1())) {
+                markPotentialRoutes(navi.getCXL(), navi.getCYLMinus1(), chosenX, chosenY);
+                moveNavigator(navi.getCXL(), navi.getCYLMinus1());
+                chosenX = navi.getCXL();
+                chosenY = navi.getCYLMinus1();
+            } else {
+                System.err.println("Error I am stuck");
+                break;
+                //method backTrack();
+            }
         }
     }
 
     private void moveNavigator(int x, int y) {
-        if (setMazeTraveledProperty(x, y, true)) {
+        if (checkCanMoveHere(x, y)) {
+            setMazeSpaceClearBooleanProperty(x, y, MazeSpaceClearSetProperties.TRAVELED, true);
             navi.setCurrentLocation(x, y);
-
-        } else
-            System.err.print("You have moved the navi to an invalid space" + x + y);
+            System.out.println("Moved to: " + x + "," + y);
+        }
     }
 
-    private Boolean setMazeTraveledProperty(int x, int y, Boolean traveled) {
-        if (moveHere(x, y)) {
-            for (MazeSpace mazeSearch : maze) {
-                if (mazeSearch.positionX == x && mazeSearch.positionY == y) {
-                    ((MazeSpaceClear) mazeSearch).setTraveled(traveled);
-                    return true;
-                }
+    //TODO ALERT THIS METHOD IS BROKEN AND IS MARKING IT AS SUCH ONE STAGE TOO FAR.
+    //TODO Will then add these routes to a list.
+
+    /***
+     * Method also known as Are we going this way. This is the first part of this method. The Method it calls is to check if it is a potential route
+     * From the point of X and Y will check the surrounding coordinates and mark if these are potential routes.
+     * @param whereWeAreGoingX - This the direction we have decided to take so we need to ignore this X
+     * @param whereWeAreGoingY - This the direction we have decided to take so we need to ignore this Y
+     * @param checkThisX - This is where we currently are before we have moved so we need to check the surrounding area X
+     * @param checkThisY - This is where we currently are before we have moved so we need to check the surrounding area Y
+     */
+    private void markPotentialRoutes(int whereWeAreGoingX, int whereWeAreGoingY, int checkThisX, int checkThisY) {
+        int xP1 = checkThisX + 1;
+        int yP1 = checkThisY + 1;
+        int yS1 = checkThisY - 1;
+        int xS1 = checkThisX - 1;
+
+        String potentialMessage = "Marked Potential at: ";
+        String potentialMessageLatter = " WhereWeAreGoing set to: " + whereWeAreGoingX + "," + whereWeAreGoingY;
+
+        System.out.println("\nValues of potentials" +
+                "\n checkThisX = " + checkThisX + " xP1 = " + xP1 +
+                "\n checkThisY = " + checkThisY + " yP1 = " + yP1 +
+                "\n checkThisY = " + checkThisY + " yS1 = " + yS1 +
+                "\n checkThisX = " + checkThisX + " xS1 = " + xS1 +
+                "\n" + potentialMessageLatter
+        );
+
+        if (whereWeAreGoingX != xP1 && whereWeAreGoingY != checkThisY) {
+            if (checkCanMoveHere(xP1, checkThisY)) {
+                setMazeSpaceClearBooleanProperty(xP1, checkThisY, MazeSpaceClearSetProperties.POTENTIAL, true);
+                System.out.println(potentialMessage + xP1 + "," + checkThisY + potentialMessageLatter);
             }
         }
-        return false;
+        if (whereWeAreGoingX != checkThisX && whereWeAreGoingY != yP1) {
+            if (checkCanMoveHere(checkThisX, yP1)) {
+                setMazeSpaceClearBooleanProperty(checkThisX, yP1, MazeSpaceClearSetProperties.POTENTIAL, true);
+                System.out.println(potentialMessage + checkThisX + "," + yP1 + potentialMessageLatter);
+            }
+        }
+        if (whereWeAreGoingX != checkThisX && whereWeAreGoingY != yS1) {
+            if (checkCanMoveHere(checkThisX, yS1)) {
+                setMazeSpaceClearBooleanProperty(checkThisX, yS1, MazeSpaceClearSetProperties.POTENTIAL, true);
+                System.out.println(potentialMessage + checkThisX + "," + yS1 + potentialMessageLatter);
+            }
+        }
+        if (whereWeAreGoingX != xS1 && whereWeAreGoingY != checkThisY) {
+            if (checkCanMoveHere(xS1, checkThisY)) {
+                setMazeSpaceClearBooleanProperty(xS1, checkThisY, MazeSpaceClearSetProperties.POTENTIAL, true);
+                System.out.println(potentialMessage + xS1 + "," + checkThisY + potentialMessageLatter);
+            }
+        }
     }
 
-    //TODO change method to scan if this is a possible route rather than move to this route. Possibly scanning if the surrounding places are moveble to
-    private Boolean moveHere(int x, int y) {
+    //TODO add the following Java doc to this method - backTrack
+    //If navigator is unable to move to this position this method will erase moves made and back track the user to the last known space
+    //
+    private void backTrack() {
+
+    }
+
+    private void setMazeSpaceClearBooleanProperty(int x, int y, MazeSpaceClearSetProperties properties, Boolean bool) {
+        for (MazeSpace mazeSearch : maze) {
+            if (mazeSearch.positionX == x && mazeSearch.positionY == y) {
+                switch (properties) {
+                    case START:
+                        ((MazeSpaceClear) mazeSearch).setStart(bool);
+                        break;
+                    case END:
+                        ((MazeSpaceClear) mazeSearch).setEnd(bool);
+                        break;
+                    //Marks the x and y as a potential route.
+                    case POTENTIAL:
+                        ((MazeSpaceClear) mazeSearch).setPotential(bool);
+                        break;
+                    case GLADOS:
+                        ((MazeSpaceClear) mazeSearch).setGlados(bool);
+                        break;
+                    case TRAVELED:
+                        ((MazeSpaceClear) mazeSearch).setTraveled(bool);
+                        break;
+                    case FAILURE:
+                        ((MazeSpaceClear) mazeSearch).setFailure(bool);
+                        break;
+                }
+                return;
+            }
+        }
+    }
+    //TODO change method to scan if this is a possible route rather than move to this route. Possibly scanning if the surrounding places are movable to
+    //TODO Check above TODO to see if still valid. It may no longer be valid.
+
+    /***
+     * Checks if this position exists
+     * Checks if this position is not a wall and is the inherited object MazeSpaceClear
+     * Checks if this position has been traveled to
+     * This method is just a check and does not make any edits
+     * @param x
+     * @param y
+     * @return true if the above is true. False if at any point it is not. Will not identify at what point it does not match.
+     */
+    private Boolean checkCanMoveHere(int x, int y) {
         for (MazeSpace mazeSearch : maze) {
             if (mazeSearch.positionX == x && mazeSearch.positionY == y)
                 if (!mazeSearch.wall && mazeSearch instanceof MazeSpaceClear) {
-                    return !((MazeSpaceClear) mazeSearch).getTraveled();
+                    //TODO You should not be both failed and traveled. You can be one or the other. If you are both something has gone wrong
+                    if (!((MazeSpaceClear) mazeSearch).getTraveled() && !((MazeSpaceClear) mazeSearch).getFailure())
+                        return true;
                 } else
                     return false;
         }

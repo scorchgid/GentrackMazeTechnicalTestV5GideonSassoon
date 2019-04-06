@@ -1,9 +1,12 @@
 public class MazeSpaceClear extends MazeSpace {
+    private Boolean propertiesPrintXtra = true; //See TEST_MARKERS_README.txt
 
-    private Boolean glados = false; //Will be able to check if this object's was a 0 which was the start of a row. Thereby allowing it able to be traversed. Now you're thinking with Portals ;)
-    private Boolean traveled = false; //Has this space been used for travel
     private Boolean start = false; //Is this the starting space
     private Boolean end = false; //Is this the ending space
+    private Boolean potential = false; //This is a direction that can be explored
+    private Boolean glados = false; //Will be able to check if this object's was a 0 which was the start of a row. Thereby allowing it able to be traversed. Now you're thinking with Portals ;)
+    private Boolean traveled = false; //Has this space been used for travel
+    private Boolean failure = false; //This is a direction that has been tried but failed
 
     /***
      * @param number either a 1 or 0
@@ -11,7 +14,7 @@ public class MazeSpaceClear extends MazeSpace {
      * @param positionY position on column
      * @param mazeHeight what is the height of this Maze, used to make sure if this position is on the edge or not
      * @param mazeWidth what is the width of this Maze, used to make sure if this position is on the edge or not
-     * @throws Exception
+     * @throws Exception If start and end point are the same
      */
     public MazeSpaceClear(String number, int positionX, int positionY, int mazeHeight, int mazeWidth) throws Exception {
         super(number, positionX, positionY);
@@ -25,36 +28,53 @@ public class MazeSpaceClear extends MazeSpace {
             glados = true;
     }
 
-    public Boolean getStart() {
+    Boolean getStart() {
         return start;
     }
 
-    public Boolean getEnd() {
+    Boolean getEnd() {
         return end;
     }
 
-    public void setStart(Boolean start) {
-        this.start = start;
+    Boolean getPotential() {
+        return potential;
     }
 
-    public void setEnd(Boolean end) {
-        this.end = end;
-    }
-
-    public Boolean getGlados() {
+    Boolean getGlados() {
         return glados;
     }
 
-    public void setGlados(Boolean glados) {
-        this.glados = glados;
-    }
-
-    public Boolean getTraveled() {
+    Boolean getTraveled() {
         return traveled;
     }
 
-    public void setTraveled(Boolean traveled) {
+    Boolean getFailure() {
+        return failure;
+    }
+
+
+    void setStart(Boolean start) {
+        this.start = start;
+    }
+
+    void setEnd(Boolean end) {
+        this.end = end;
+    }
+
+    void setPotential(Boolean potential) {
+        this.potential = potential;
+    }
+
+    void setGlados(Boolean glados) {
+        this.glados = glados;
+    }
+
+    void setTraveled(Boolean traveled) {
         this.traveled = traveled;
+    }
+
+    void setFailure(Boolean failure) {
+        this.failure = failure;
     }
 
     /***
@@ -82,7 +102,13 @@ public class MazeSpaceClear extends MazeSpace {
             patternBuild = patternBuild + "E";
         else if (traveled)
             patternBuild = patternBuild + "X";
-        else
+        else if (failure) {
+            if (propertiesPrintXtra)
+                patternBuild = patternBuild + "!";
+        } else if (potential) {
+            if (propertiesPrintXtra)
+                patternBuild = patternBuild + "~";
+        } else
             patternBuild = patternBuild + " ";
         return patternBuild;
     }

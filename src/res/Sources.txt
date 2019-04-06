@@ -15,3 +15,7 @@ https://stackoverflow.com/questions/30022840/how-do-you-pull-specific-objects-fr
 Creating files
 https://stackoverflow.com/questions/2885173/how-do-i-create-a-file-and-write-to-it-in-java/23221771
 https://www.logicbig.com/how-to/code-snippets/jcode-java-io-files-iswritable.html
+
+Eunums
+https://www.w3schools.com/java/java_enums.asp
+https://stackoverflow.com/questions/8108980/java-using-enum-with-switch-statement

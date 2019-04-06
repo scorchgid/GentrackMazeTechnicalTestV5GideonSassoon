@@ -12,11 +12,10 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello GenTrack");
         List<Path> files = buildFileList();
-        //runSingleMaze(files.get(0));
-
+        runSingleMaze(files.get(1));
         //TODO change to this method on submission
         assert files != null;
-        runEachMaze(files);
+        //runEachMaze(files);
     }
 
     private static void runEachMaze(List<Path> files) {
@@ -26,7 +25,7 @@ public class Main {
         }
     }
 
-    public static void runSingleMaze(Path file) {
+    private static void runSingleMaze(Path file) {
         maze = new Maze(file);
         exportMaze(file.getFileName());
     }
@@ -52,7 +51,6 @@ public class Main {
 
     private static void exportMaze(Path fileName) {
         try {
-
             String subDir = "src\\res\\Solutions";
             Path dir = Paths.get(subDir);
             String mazeExport = maze.getMaze();
@@ -71,12 +69,11 @@ public class Main {
 
             subDir = subDir + "\\" + fileName.toString();
             System.out.println("New file and Directory: " + dir.toString());
-
             dir = Paths.get(subDir);
 
             //Check if this file already exists if so delete it to create a new one
-            if(Files.exists(dir))
-               Files.delete(dir);
+            if (Files.exists(dir))
+                Files.delete(dir);
 
             Files.createFile(dir);
             List<String> lines = Arrays.asList(mazeExport);

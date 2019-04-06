@@ -1,7 +1,7 @@
 class MazeSpace {
-    protected Boolean wall;
-    protected int positionX;
-    protected int positionY;
+    Boolean wall;
+    int positionX;
+    int positionY;
 
     MazeSpace(String number, int positionX, int positionY) throws Exception {
         if (number.equals("1"))
@@ -16,7 +16,7 @@ class MazeSpace {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         if (positionX == 0)
             return "\n#";
         else
