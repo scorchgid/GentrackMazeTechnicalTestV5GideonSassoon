@@ -52,7 +52,6 @@ public class MazeSpaceClear extends MazeSpace {
         return failure;
     }
 
-
     void setStart(Boolean start) {
         this.start = start;
     }
@@ -93,7 +92,7 @@ public class MazeSpaceClear extends MazeSpace {
             }
 
         String patternBuild = "";
-        if (positionX == 0)
+        if (this.getPositionX() == 0)
             patternBuild = "\n";
 
         if (start)
@@ -121,12 +120,14 @@ public class MazeSpaceClear extends MazeSpace {
     public String toStringProperties() {
         return "MazeSpaceClear Object Properties{" +
                 "wall=" + wall +
-                ", positionX=" + positionX +
-                ", positionY=" + positionY +
-                ", wrapping=" + glados +
-                ", traveled=" + traveled +
+                ", positionX=" + this.getPositionX() +
+                ", positionY=" + this.getPositionY() +
                 ", start=" + start +
                 ", end=" + end +
+                ", potential=" + potential +
+                ", wrapping=" + glados +
+                ", traveled=" + traveled +
+                ", failure=" + failure +
                 '}';
     }
 }

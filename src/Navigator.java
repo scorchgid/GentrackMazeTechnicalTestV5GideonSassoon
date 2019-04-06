@@ -3,6 +3,11 @@ public class Navigator {
     private int currentXLocation;
     private int currentYLocation;
 
+    public Navigator(int currentXLocation, int currentYLocation) {
+        this.currentXLocation = currentXLocation;
+        this.currentYLocation = currentYLocation;
+    }
+
     Boolean confirmPositionMatches(int x, int y) {
         return x == currentXLocation && y == currentYLocation;
     }

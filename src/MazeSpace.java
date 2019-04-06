@@ -1,7 +1,7 @@
 class MazeSpace {
     Boolean wall;
-    int positionX;
-    int positionY;
+    private int positionX;
+    private int positionY;
 
     MazeSpace(String number, int positionX, int positionY) throws Exception {
         if (number.equals("1"))
@@ -12,6 +12,22 @@ class MazeSpace {
             throw new Exception("MazeSpace (Constructor) MazeSpace.java Given MazeSpace Object did not equal a 1 or 0.\nItem given was: " + number
                     + "\nProperties:\n" + toStringProperties());
         this.positionX = positionX;
+        this.positionY = positionY;
+    }
+
+    public int getPositionX() {
+        return positionX;
+    }
+
+    public void setPositionX(int positionX) {
+        this.positionX = positionX;
+    }
+
+    public int getPositionY() {
+        return positionY;
+    }
+
+    public void setPositionY(int positionY) {
         this.positionY = positionY;
     }
 
