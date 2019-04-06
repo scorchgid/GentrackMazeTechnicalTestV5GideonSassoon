@@ -69,4 +69,32 @@ TO string method for Maze items old
 
     public enum mazeItem {
         WALL, SPACE
+
     }
+
+    Potential
+    String potentialMessage = "Marked Potential at: ";
+    String potentialMessageLatter = " WhereWeAreGoing set to: " + whereWeAreGoingX + "," + whereWeAreGoingY;
+
+    System.out.println("\nValues of potentials" +
+                "\n checkThisY = " + checkThisY + " yP1 = " + yP1 +
+                "\n checkThisX = " + checkThisX + " xP1 = " + xP1 +
+                "\n checkThisX = " + checkThisX + " xS1 = " + xS1 +
+                "\n checkThisY = " + checkThisY + " yS1 = " + yS1 +
+                "\n" + potentialMessageLatter
+        );
+
+    Each of these System.out.printline will go at the bottom of each if statement. I have used the full if statement as an example
+            if (whereWeAreGoingX != checkThisX && whereWeAreGoingY != yP1) {
+                if (checkCanMoveHere(checkThisX, yP1)) {
+                    setMazeSpaceClearBooleanProperty(checkThisX, yP1, MazeSpaceClearSetProperties.POTENTIAL, true);
+                    System.out.println(potentialMessage + checkThisX + "," + yP1 + potentialMessageLatter);
+                }
+            }
+
+    System.out.println(potentialMessage + xP1 + "," + checkThisY + potentialMessageLatter);
+    System.out.println(potentialMessage + xS1 + "," + checkThisY + potentialMessageLatter);
+    System.out.println(potentialMessage + checkThisX + "," + yS1 + potentialMessageLatter);
+
+
+

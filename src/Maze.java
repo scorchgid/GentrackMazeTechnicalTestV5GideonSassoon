@@ -217,24 +217,24 @@ public class Maze {
             printMaze("Navigating");
             if (checkCanMoveHere(navi.getCXL(), navi.getCYLPlus1())) {
                 markPotentialRoutes(navi.getCXL(), navi.getCYLPlus1(), chosenX, chosenY);
-                moveNavigator(navi.getCXL(), navi.getCYLPlus1());
                 chosenX = navi.getCXL();
                 chosenY = navi.getCYLPlus1();
+                moveNavigator(navi.getCXL(), navi.getCYLPlus1());
             } else if (checkCanMoveHere((navi.getCXLPlus1()), navi.getCYL())) {
                 markPotentialRoutes(navi.getCXLPlus1(), navi.getCYL(), chosenX, chosenY);
-                moveNavigator(navi.getCXLPlus1(), navi.getCYL());
                 chosenX = navi.getCXLPlus1();
                 chosenY = navi.getCYL();
+                moveNavigator(navi.getCXLPlus1(), navi.getCYL());
             } else if (checkCanMoveHere(navi.getCXLMinus1(), navi.getCYL())) {
                 markPotentialRoutes(navi.getCXLMinus1(), navi.getCYL(), chosenX, chosenY);
-                moveNavigator(navi.getCXLMinus1(), navi.getCYL());
                 chosenX = navi.getCXLMinus1();
                 chosenY = navi.getCYL();
+                moveNavigator(navi.getCXLMinus1(), navi.getCYL());
             } else if (checkCanMoveHere(navi.getCXL(), navi.getCYLMinus1())) {
                 markPotentialRoutes(navi.getCXL(), navi.getCYLMinus1(), chosenX, chosenY);
-                moveNavigator(navi.getCXL(), navi.getCYLMinus1());
                 chosenX = navi.getCXL();
                 chosenY = navi.getCYLMinus1();
+                moveNavigator(navi.getCXL(), navi.getCYLMinus1());
             } else {
                 System.err.println("Error I am stuck");
                 break;
@@ -251,9 +251,7 @@ public class Maze {
         }
     }
 
-    //TODO ALERT THIS METHOD IS BROKEN AND IS MARKING IT AS SUCH ONE STAGE TOO FAR.
-    //TODO Will then add these routes to a list.
-
+    //TODO Add these routes to a list.
     /***
      * Method also known as Are we going this way. This is the first part of this method. The Method it calls is to check if it is a potential route
      * From the point of X and Y will check the surrounding coordinates and mark if these are potential routes.
@@ -263,44 +261,29 @@ public class Maze {
      * @param checkThisY - This is where we currently are before we have moved so we need to check the surrounding area Y
      */
     private void markPotentialRoutes(int whereWeAreGoingX, int whereWeAreGoingY, int checkThisX, int checkThisY) {
-        int xP1 = checkThisX + 1;
         int yP1 = checkThisY + 1;
-        int yS1 = checkThisY - 1;
+        int xP1 = checkThisX + 1;
         int xS1 = checkThisX - 1;
+        int yS1 = checkThisY - 1;
 
-        String potentialMessage = "Marked Potential at: ";
-        String potentialMessageLatter = " WhereWeAreGoing set to: " + whereWeAreGoingX + "," + whereWeAreGoingY;
-
-        System.out.println("\nValues of potentials" +
-                "\n checkThisX = " + checkThisX + " xP1 = " + xP1 +
-                "\n checkThisY = " + checkThisY + " yP1 = " + yP1 +
-                "\n checkThisY = " + checkThisY + " yS1 = " + yS1 +
-                "\n checkThisX = " + checkThisX + " xS1 = " + xS1 +
-                "\n" + potentialMessageLatter
-        );
-
-        if (whereWeAreGoingX != xP1 && whereWeAreGoingY != checkThisY) {
-            if (checkCanMoveHere(xP1, checkThisY)) {
-                setMazeSpaceClearBooleanProperty(xP1, checkThisY, MazeSpaceClearSetProperties.POTENTIAL, true);
-                System.out.println(potentialMessage + xP1 + "," + checkThisY + potentialMessageLatter);
-            }
-        }
         if (whereWeAreGoingX != checkThisX && whereWeAreGoingY != yP1) {
             if (checkCanMoveHere(checkThisX, yP1)) {
                 setMazeSpaceClearBooleanProperty(checkThisX, yP1, MazeSpaceClearSetProperties.POTENTIAL, true);
-                System.out.println(potentialMessage + checkThisX + "," + yP1 + potentialMessageLatter);
             }
         }
-        if (whereWeAreGoingX != checkThisX && whereWeAreGoingY != yS1) {
-            if (checkCanMoveHere(checkThisX, yS1)) {
-                setMazeSpaceClearBooleanProperty(checkThisX, yS1, MazeSpaceClearSetProperties.POTENTIAL, true);
-                System.out.println(potentialMessage + checkThisX + "," + yS1 + potentialMessageLatter);
+        if (whereWeAreGoingX != xP1 && whereWeAreGoingY != checkThisY) {
+            if (checkCanMoveHere(xP1, checkThisY)) {
+                setMazeSpaceClearBooleanProperty(xP1, checkThisY, MazeSpaceClearSetProperties.POTENTIAL, true);
             }
         }
         if (whereWeAreGoingX != xS1 && whereWeAreGoingY != checkThisY) {
             if (checkCanMoveHere(xS1, checkThisY)) {
                 setMazeSpaceClearBooleanProperty(xS1, checkThisY, MazeSpaceClearSetProperties.POTENTIAL, true);
-                System.out.println(potentialMessage + xS1 + "," + checkThisY + potentialMessageLatter);
+            }
+        }
+        if (whereWeAreGoingX != checkThisX && whereWeAreGoingY != yS1) {
+            if (checkCanMoveHere(checkThisX, yS1)) {
+                setMazeSpaceClearBooleanProperty(checkThisX, yS1, MazeSpaceClearSetProperties.POTENTIAL, true);
             }
         }
     }
