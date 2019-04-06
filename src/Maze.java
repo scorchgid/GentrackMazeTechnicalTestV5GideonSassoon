@@ -15,6 +15,7 @@ public class Maze {
     private String[] parts;
     private String mazeFileName;
     private Navigator navi;
+    private List<MazeSpaceClear> potentialRoutes = new ArrayList<>();
     /*
      * Allows the turning on and off of PrintLns rather than finding each of them in the file.
      */
@@ -237,6 +238,7 @@ public class Maze {
                 moveNavigator(navi.getCXL(), navi.getCYLMinus1());
             } else {
                 System.err.println("Error I am stuck");
+                printPotentialList();
                 break;
                 //method backTrack();
             }
@@ -286,12 +288,48 @@ public class Maze {
                 setMazeSpaceClearBooleanProperty(checkThisX, yS1, MazeSpaceClearSetProperties.POTENTIAL, true);
             }
         }
+
+        //Checks each of the MazeSpace
+        for (MazeSpace mazeSearch : maze) {
+            //if this mazeSpace is not a wall and inherits MazeSpaceClear
+            if (!mazeSearch.wall && mazeSearch instanceof MazeSpaceClear) {
+                //If MazeSpaceClear potential is true
+                if (((MazeSpaceClear) mazeSearch).getPotential()) {
+                    boolean thisMazeExists = false;
+                    int checkXIsNotInArray = mazeSearch.positionX;
+                    int checkYIsNotInArray = mazeSearch.positionY;
+                    // Run through the list of potentialRoute MazeSpaceClear objects (This is a list of MazeSpaceClear which have potential set to true
+                    for (MazeSpaceClear potentialMazeObject : potentialRoutes) {
+                        //Is the one we are adding already in this list?
+                        if (potentialMazeObject.positionX == checkXIsNotInArray && potentialMazeObject.positionY == checkYIsNotInArray)
+                            //If so mark this as true
+                            thisMazeExists = true;
+                    }
+                    //As long as this maze does not exist in the list. Add it to it
+                    if (!thisMazeExists) {
+                        potentialRoutes.add((MazeSpaceClear) mazeSearch);
+                    }
+                }
+            }
+        }
+    }
+
+    void printPotentialList() {
+        System.out.println("This is a list of Potential Maze");
+        for (MazeSpace mazeItemRow : potentialRoutes) {
+            System.out.println(mazeItemRow.toStringProperties());
+        }
+        System.out.print("\n");
     }
 
     //TODO add the following Java doc to this method - backTrack
     //If navigator is unable to move to this position this method will erase moves made and back track the user to the last known space
     //
     private void backTrack() {
+
+    }
+
+    private void navigateMazeRouteAsFailure() {
 
     }
 
