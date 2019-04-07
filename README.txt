@@ -6,11 +6,20 @@ Wrapping has not been completed. I'm sorry I got stuck on the large maze and was
 There are several properties which will print information in the Maze.java class. Try them out and see what information you get. I can write a list if you want but I need more time.
  The only two that are on will print the maze if an exception is thrown and print the maze at the end.
 
-Only the following Mazes work
+Run the program. I used Intelij with Java 11 set.
+At the end of the program a folder called Solutions will be added with the completed Mazes inisde. Folder directory will be 
+ Gentrack Maze Technical Test\src\res\Solutions
+
+Only the following mazes can be solved.
 input.txt
 medium_input.txt
 small_input.txt
 sparse_medium.txt
+
+Sadly I got stuck with dead ends and wasn't able to complete the wrapping one but you'll notice some firm foundations in place for it.
+
+Name and location of the input file should be selectable at runtime
+Not possible sadly HOWEVER. Any .txt​ ​maze files you add to the Samples folder will be run. There is also a place in the code for you to designate the number in the list it is in.
 
 Solving a maze
 ==============
