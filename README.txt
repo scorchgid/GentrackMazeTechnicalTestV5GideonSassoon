@@ -3,6 +3,14 @@ NOTES FOR EXAM MARKERS
 This project was made using Java 11. However I reckon if you're using Java 8 and upwards you should be fine.
 An additional Failure and Potential marker has been added which was not in the test requirement. you can disable this by changing the variable in MazeSpaceClear.java - propertiesPrintXtra to False.
 Wrapping has not been completed. I'm sorry I got stuck on the large maze and was unable to complete it but the foundations for doing it are here.
+There are several properties which will print information in the Maze.java class. Try them out and see what information you get. I can write a list if you want but I need more time.
+ The only two that are on will print the maze if an exception is thrown and print the maze at the end.
+
+Only the following Mazes work
+input.txt
+medium_input.txt
+small_input.txt
+sparse_medium.txt
 
 Solving a maze
 ==============

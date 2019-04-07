@@ -12,10 +12,10 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello GenTrack");
         List<Path> files = buildFileList();
-        runSingleMaze(files.get(1));
-        //TODO change to this method on submission
+        //Cam use this to run single file
+        //runSingleMaze(files.get(1));
         assert files != null;
-        //runEachMaze(files);
+        runEachMaze(files);
     }
 
     private static void runEachMaze(List<Path> files) {

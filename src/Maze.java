@@ -22,14 +22,20 @@ public class Maze {
     private Boolean propertiesPrintXY = false;
     private Boolean propertiesPrintRawAfterRemoval = false;
     private Boolean propertiesPrintRawInitialMaze = false;
-    private Boolean propertiesPrintMazeNavigation = true;
-    private Boolean propertiesPrintMazeNavigationRouge = true;
-    private Boolean propertiesPrintMazeException = true;
+    private Boolean propertiesPrintMazeNavigation = false;
+    private Boolean propertiesPrintMazeNavigationRouge = false;
     private Boolean propertiesPrintMazeLineRemoval = false;
     private Boolean propertiesPrintPropertiesStartEnd = false;
     private Boolean propertiesPrintMazeStartEnd = false;
     private Boolean propertiesPrintLookForStartEnd = false;
+    private Boolean propertiesPrintPotentialList = false;
+    private Boolean propertiesPrintPotentialProperties = false;
+    private Boolean propertiesPrintIAmStuck = false;
+    private Boolean printPropertiesPrintRougeNavigatorStartPosition = false;
+    private Boolean propertiesPrintPropertiesForRouge = false;
     private Boolean propertiesPrintMazeNavigationEnd = true;
+    private Boolean propertiesPrintMazeException = true;
+
 
     public Maze(Path file) {
         try {
@@ -259,13 +265,15 @@ public class Maze {
                 chosenY = navi.getCYLMinus1();
                 moveNavigator(navi.getCXL(), navi.getCYLMinus1());
             } else {
-                System.out.println("Error I am stuck at: " + chosenX + "," + chosenY);
+                if (propertiesPrintIAmStuck)
+                    System.out.println("Error I am stuck at: " + chosenX + "," + chosenY);
                 //Use the Potential list and find the last one.
                 if (!potentialRoutes.isEmpty()) {
-                    printPotentialList();
+                    if (propertiesPrintPotentialList)
+                        printPotentialList();
+                    navigateMazeRouteAsFailure(chosenX, chosenY, potentialRoutes.get(potentialRoutes.size() - 1).getLastPositionX(), potentialRoutes.get(potentialRoutes.size() - 1).getLastPositionY());
                     chosenX = potentialRoutes.get(potentialRoutes.size() - 1).getLastPositionX();
                     chosenY = potentialRoutes.get(potentialRoutes.size() - 1).getLastPositionY();
-                    navigateMazeRouteAsFailure(potentialRoutes.get(potentialRoutes.size() - 1).getLastPositionX(), potentialRoutes.get(potentialRoutes.size() - 1).getLastPositionY());
                 } else
                     throw new Exception("Error, there are no more potential routes. Dead End!");
             }
@@ -274,62 +282,64 @@ public class Maze {
 
     //If navigator is unable to move to this position this method will erase moves made and back track the user to the last known space
     //TODO Waring this is likely the cause of the bug because it's check that the potential route was used seeing as that route was no longer in the list it may be this is what's causing the maze to re-take this route. Though it should be stopped by the failure marker. Investigation will occur
-    private void navigateMazeRouteAsFailure(int lastX, int lastY) {
+    private void navigateMazeRouteAsFailure(int deadEndX, int deadEndY, int setNaviX, int setNaviY) {
         //Set the Navigator to that position
-        System.out.println("Given position " + lastX + "," + lastY + "\n" + getMazeObjectCoordinateProperties(lastX, lastY));
+        if (printPropertiesPrintRougeNavigatorStartPosition)
+            System.out.println("Given position " + deadEndX + "," + deadEndY + "\nPotential start: " + getMazeObjectCoordinateProperties(setNaviX, setNaviY));
 
-        //TODO one step backwards
+        //TODO one step backwards You are at you current location. You go in reverse till you get to potential
+        navi.setCurrentLocation(setNaviX, setNaviY);
+        Navigator rougeNavi = new Navigator(deadEndX, deadEndY);
 
+        setMazeSpaceClearBooleanProperty(deadEndX, deadEndY, MazeSpaceClearSetProperties.TRAVELED, false);
 
-        //TODO Backtrack -
-        navi.setCurrentLocation(lastX, lastY);
-        Navigator rougeNavi = new Navigator(lastX, lastY);
-        boolean rougeNavigate = true;
+        while (!rougeNavi.confirmPositionMatches(setNaviX, setNaviY)) {
+            if (checkCanMoveHere(rougeNavi.getCXL(), rougeNavi.getCYLMinus1(), true))
+                moveRougeNavigator(rougeNavi.getCXL(), rougeNavi.getCYLMinus1(), rougeNavi);
+            else if (checkCanMoveHere(rougeNavi.getCXLMinus1(), rougeNavi.getCYL(), true))
+                moveRougeNavigator(rougeNavi.getCXLMinus1(), rougeNavi.getCYL(), rougeNavi);
+            else if (checkCanMoveHere((rougeNavi.getCXLPlus1()), rougeNavi.getCYL(), true))
+                moveRougeNavigator(rougeNavi.getCXLPlus1(), rougeNavi.getCYL(), rougeNavi);
+            else if (checkCanMoveHere(rougeNavi.getCXL(), rougeNavi.getCYLPlus1(), true))
+                moveRougeNavigator(rougeNavi.getCXL(), rougeNavi.getCYLPlus1(), rougeNavi);
+        }
 
-        //Set the first direction available as Failure
-        if (checkCanMoveHere(rougeNavi.getCXL(), rougeNavi.getCYLPlus1(), true)) {
+        //TODO check route ahead is a Failure if not and it is clear mark it as failure. Close up shop
+        if (checkCanMoveHere(rougeNavi.getCXL(), rougeNavi.getCYLPlus1(), false)) {
             setMazeSpaceClearBooleanProperty(rougeNavi.getCXL(), rougeNavi.getCYLPlus1(), MazeSpaceClearSetProperties.FAILURE, true);
             setMazeSpaceClearBooleanProperty(rougeNavi.getCXL(), rougeNavi.getCYLPlus1(), MazeSpaceClearSetProperties.TRAVELED, false);
-            System.out.println("Properties for changed Rouge Route: " + getMazeObjectCoordinateProperties(rougeNavi.getCXL(), rougeNavi.getCYLPlus1()));
+            if (propertiesPrintPropertiesForRouge)
+                System.out.println("Properties for changed Rouge Route: " + getMazeObjectCoordinateProperties(rougeNavi.getCXL(), rougeNavi.getCYLPlus1()));
             rougeNavi.setCurrentLocation(rougeNavi.getCXL(), rougeNavi.getCYLPlus1());
-        } else if (checkCanMoveHere((rougeNavi.getCXLPlus1()), rougeNavi.getCYL(), true)) {
+        } else if (checkCanMoveHere((rougeNavi.getCXLPlus1()), rougeNavi.getCYL(), false)) {
             setMazeSpaceClearBooleanProperty(rougeNavi.getCXLPlus1(), rougeNavi.getCYL(), MazeSpaceClearSetProperties.FAILURE, true);
             setMazeSpaceClearBooleanProperty(rougeNavi.getCXLPlus1(), rougeNavi.getCYL(), MazeSpaceClearSetProperties.TRAVELED, false);
-            System.out.println("Properties for changed Rouge Route: " + getMazeObjectCoordinateProperties(rougeNavi.getCXLPlus1(), rougeNavi.getCYL()));
+            if (propertiesPrintPropertiesForRouge)
+                System.out.println("Properties for changed Rouge Route: " + getMazeObjectCoordinateProperties(rougeNavi.getCXLPlus1(), rougeNavi.getCYL()));
             rougeNavi.setCurrentLocation(rougeNavi.getCXLPlus1(), rougeNavi.getCYL());
-        } else if (checkCanMoveHere(rougeNavi.getCXLMinus1(), rougeNavi.getCYL(), true)) {
+        } else if (checkCanMoveHere(rougeNavi.getCXLMinus1(), rougeNavi.getCYL(), false)) {
             setMazeSpaceClearBooleanProperty(rougeNavi.getCXLMinus1(), rougeNavi.getCYL(), MazeSpaceClearSetProperties.FAILURE, true);
             setMazeSpaceClearBooleanProperty(rougeNavi.getCXLMinus1(), rougeNavi.getCYL(), MazeSpaceClearSetProperties.TRAVELED, false);
-            System.out.println("Properties for changed Rouge Route: " + getMazeObjectCoordinateProperties(rougeNavi.getCXLMinus1(), rougeNavi.getCYL()));
+            if (propertiesPrintPropertiesForRouge)
+                System.out.println("Properties for changed Rouge Route: " + getMazeObjectCoordinateProperties(rougeNavi.getCXLMinus1(), rougeNavi.getCYL()));
             rougeNavi.setCurrentLocation(rougeNavi.getCXLMinus1(), rougeNavi.getCYL());
-        } else if (checkCanMoveHere(rougeNavi.getCXL(), rougeNavi.getCYLMinus1(), true)) {
+        } else if (checkCanMoveHere(rougeNavi.getCXL(), rougeNavi.getCYLMinus1(), false)) {
             setMazeSpaceClearBooleanProperty(rougeNavi.getCXL(), rougeNavi.getCYLMinus1(), MazeSpaceClearSetProperties.FAILURE, true);
             setMazeSpaceClearBooleanProperty(rougeNavi.getCXL(), rougeNavi.getCYLMinus1(), MazeSpaceClearSetProperties.TRAVELED, false);
-            System.out.println("Properties for changed Rouge Route: " + getMazeObjectCoordinateProperties(rougeNavi.getCXL(), rougeNavi.getCYLMinus1()));
+            if (propertiesPrintPropertiesForRouge)
+                System.out.println("Properties for changed Rouge Route: " + getMazeObjectCoordinateProperties(rougeNavi.getCXL(), rougeNavi.getCYLMinus1()));
             rougeNavi.setCurrentLocation(rougeNavi.getCXL(), rougeNavi.getCYLMinus1());
         } else
             System.err.println("navigateMazeRouteAsFailure - Rouge Navigator could not find route. Current location of Navi: " + rougeNavi.getCXL() + "," + rougeNavi.getCYL());
 
-        //Go through and Navigate through the maze and instead of marking the places as traveled mark them as null.
-        do {
-            if (checkCanMoveHere(rougeNavi.getCXL(), rougeNavi.getCYLPlus1(), true)) {
-                moveRougeNavigator(rougeNavi.getCXL(), rougeNavi.getCYLPlus1(), rougeNavi);
-            } else if (checkCanMoveHere((rougeNavi.getCXLPlus1()), rougeNavi.getCYL(), true)) {
-                moveRougeNavigator(rougeNavi.getCXLPlus1(), rougeNavi.getCYL(), rougeNavi);
-            } else if (checkCanMoveHere(rougeNavi.getCXLMinus1(), rougeNavi.getCYL(), true)) {
-                moveRougeNavigator(rougeNavi.getCXLMinus1(), rougeNavi.getCYL(), rougeNavi);
-            } else if (checkCanMoveHere(rougeNavi.getCXL(), rougeNavi.getCYLMinus1(), true)) {
-                moveRougeNavigator(rougeNavi.getCXL(), rougeNavi.getCYLMinus1(), rougeNavi);
-            } else {
-                System.out.println("Completed Rouge Action Returning to Base");
-                setMazeSpaceClearBooleanProperty(lastX, lastY, MazeSpaceClearSetProperties.POTENTIAL, false);
-                System.out.println("\nProperties of potential route object: " + potentialRoutes.get(potentialRoutes.size() - 1).toStringProperties());
-                potentialRoutes.remove(potentialRoutes.size() - 1);
-                printPotentialList();
-                rougeNavigate = false;
-            }
-        } while (rougeNavigate);
-        //printMaze("Rouge Navigation AFTER FAILURE");
+        setMazeSpaceClearBooleanProperty(setNaviX, setNaviY, MazeSpaceClearSetProperties.TRAVELED, true);
+        setMazeSpaceClearBooleanProperty(setNaviX, setNaviY, MazeSpaceClearSetProperties.POTENTIAL, false);
+        if (propertiesPrintPotentialProperties)
+            System.out.println("\nProperties of potential route object: " + potentialRoutes.get(potentialRoutes.size() - 1).toStringProperties());
+        potentialRoutes.remove(potentialRoutes.size() - 1);
+        if (propertiesPrintPotentialList)
+            printPotentialList();
+
     }
 
     private void moveNavigator(int x, int y) {
