@@ -1,10 +1,13 @@
 public class MazeSpaceClear extends MazeSpace {
-    private Boolean propertiesPrintXtra = true; //See TEST_MARKERS_README.txt
+    private Boolean propertiesPrintXtra = true; //See README.txt
 
     private Boolean start = false; //Is this the starting space
     private Boolean end = false; //Is this the ending space
     private Boolean potential = false; //This is a direction that can be explored
-    private Boolean glados = false; //Will be able to check if this object's was a 0 which was the start of a row. Thereby allowing it able to be traversed. Now you're thinking with Portals ;)
+    private Boolean wrappingXUp = false; //Will be able to check if this object's was a 0 which was the start of a row. Thereby allowing it able to be traversed. Now you're thinking with Portals ;)
+    private Boolean wrappingXDown = false; //Will be able to check if this object's was a 0 which was the start of a row. Thereby allowing it able to be traversed. Now you're thinking with Portals ;)
+    private Boolean wrappingYUp = false; //Will be able to check if this object's was a 0 which was the start of a row. Thereby allowing it able to be traversed. Now you're thinking with Portals ;)
+    private Boolean wrappingYDown = false; //Will be able to check if this object's was a 0 which was the start of a row. Thereby allowing it able to be traversed. Now you're thinking with Portals ;)
     private Boolean traveled = false; //Has this space been used for travel
     private Boolean failure = false; //This is a direction that has been tried but failed
 
@@ -18,14 +21,25 @@ public class MazeSpaceClear extends MazeSpace {
      */
     public MazeSpaceClear(String number, int positionX, int positionY, int mazeHeight, int mazeWidth) throws Exception {
         super(number, positionX, positionY);
+        determineWrapping(positionX, positionY, mazeWidth, mazeHeight);
+    }
 
-        /***
-         * Glados check, essentially check if the space is at an edge where the program can traverse, you've referred to this as wrapping.
-         */
-        if (positionX == 0 || positionX == mazeWidth)
-            glados = true;
-        if (positionY == 0 || positionY == mazeHeight)
-            glados = true;
+    /***
+     * Wrapping check, essentially check if the space is at an edge where the program can traverse, you've referred to this as wrapping.
+     * @param positionX
+     * @param positionY
+     * @param mazeWidth
+     * @param mazeHeight
+     */
+    private void determineWrapping(int positionX, int positionY, int mazeWidth, int mazeHeight) {
+        if (positionX == 0)
+            wrappingXUp = true;
+        if (positionX == mazeWidth)
+            wrappingXDown = true;
+        if (positionY == 0)
+            wrappingYUp = true;
+        if (positionY == mazeHeight)
+            wrappingYDown = true;
     }
 
     Boolean getStart() {
@@ -40,8 +54,20 @@ public class MazeSpaceClear extends MazeSpace {
         return potential;
     }
 
-    Boolean getGlados() {
-        return glados;
+    Boolean getWrappingXUp() {
+        return wrappingXUp;
+    }
+
+    Boolean getWrappingXDown() {
+        return wrappingXDown;
+    }
+
+    Boolean getWrappingYUp() {
+        return wrappingYUp;
+    }
+
+    Boolean getWrappingYDown() {
+        return wrappingYDown;
     }
 
     Boolean getTraveled() {
@@ -64,8 +90,20 @@ public class MazeSpaceClear extends MazeSpace {
         this.potential = potential;
     }
 
-    void setGlados(Boolean glados) {
-        this.glados = glados;
+    void setWrappingXUp(Boolean wrappingX) {
+        this.wrappingXUp = wrappingX;
+    }
+
+    void setWrappingXDown(Boolean wrappingX) {
+        this.wrappingXDown = wrappingX;
+    }
+
+    void setWrappingYUp(Boolean wrappingY) {
+        this.wrappingYUp = wrappingY;
+    }
+
+    void setWrappingYDown(Boolean wrappingY) {
+        this.wrappingYDown = wrappingY;
     }
 
     void setTraveled(Boolean traveled) {
@@ -99,22 +137,22 @@ public class MazeSpaceClear extends MazeSpace {
             patternBuild = patternBuild + "S";
         else if (end)
             patternBuild = patternBuild + "E";
-        else if (traveled)
-            patternBuild = patternBuild + "X";
         else if (failure) {
             if (propertiesPrintXtra)
                 patternBuild = patternBuild + "!";
-        } else if (potential) {
+        } else if (traveled)
+            patternBuild = patternBuild + "X";
+        else if (potential) {
             if (propertiesPrintXtra)
                 patternBuild = patternBuild + "~";
         } else
             patternBuild = patternBuild + " ";
         return patternBuild;
     }
+//Prints properties of object
 
     /***
-     * Prints properties of object
-     * @return wall, positionX, positionY, glados, traveled, start, end
+     * @return a printed String of properties of object
      */
     @Override
     public String toStringProperties() {
@@ -125,7 +163,10 @@ public class MazeSpaceClear extends MazeSpace {
                 ", start=" + start +
                 ", end=" + end +
                 ", potential=" + potential +
-                ", wrapping=" + glados +
+                ", wrappingXUp=" + wrappingXUp +
+                ", wrappingXDown=" + wrappingXDown +
+                ", wrappingYUp=" + wrappingYUp +
+                ", wrappingYDown=" + wrappingYDown +
                 ", traveled=" + traveled +
                 ", failure=" + failure +
                 '}';

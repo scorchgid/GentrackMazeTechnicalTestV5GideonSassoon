@@ -98,3 +98,19 @@ TO string method for Maze items old
 
 
 
+/*
+        if (checkCanMoveHere(rougeNavi.getCXL(), rougeNavi.getCYLPlus1(), true)) {
+            setMazeSpaceClearBooleanProperty(rougeNavi.getCXL(), rougeNavi.getCYLPlus1(), MazeSpaceClearSetProperties.FAILURE, true);
+            moveRougeNavigator(rougeNavi.getCXL(), rougeNavi.getCYLPlus1(), rougeNavi);
+        } else if (checkCanMoveHere((rougeNavi.getCXLPlus1()), rougeNavi.getCYL(), true)) {
+            setMazeSpaceClearBooleanProperty(rougeNavi.getCXLPlus1(), rougeNavi.getCYL(), MazeSpaceClearSetProperties.FAILURE, true);
+            moveRougeNavigator(rougeNavi.getCXLPlus1(), rougeNavi.getCYL(), rougeNavi);
+        } else if (checkCanMoveHere(rougeNavi.getCXLMinus1(), rougeNavi.getCYL(), true)) {
+            setMazeSpaceClearBooleanProperty(rougeNavi.getCXLMinus1(), rougeNavi.getCYL(), MazeSpaceClearSetProperties.FAILURE, true);
+            moveRougeNavigator(rougeNavi.getCXLMinus1(), rougeNavi.getCYL(), rougeNavi);
+        } else if (checkCanMoveHere(rougeNavi.getCXL(), rougeNavi.getCYLMinus1(), true)) {
+            setMazeSpaceClearBooleanProperty(rougeNavi.getCXL(), rougeNavi.getCYLMinus1(), MazeSpaceClearSetProperties.FAILURE, true);
+            moveRougeNavigator(rougeNavi.getCXL(), rougeNavi.getCYLMinus1(), rougeNavi);
+        } else
+            System.err.println("navigateMazeRouteAsFailure - Rouge Navigator could not find route. Current location of Navi: " + rougeNavi.getCXL() + "," + rougeNavi.getCYL());
+*/

@@ -1,3 +1,9 @@
+NOTES FOR EXAM MARKERS
+==============
+This project was made using Java 11. However I reckon if you're using Java 8 and upwards you should be fine.
+An additional Failure and Potential marker has been added which was not in the test requirement. you can disable this by changing the variable in MazeSpaceClear.java - propertiesPrintXtra to False.
+Wrapping has not been completed. I'm sorry I got stuck on the large maze and was unable to complete it but the foundations for doing it are here.
+
 Solving a maze
 ==============
 
